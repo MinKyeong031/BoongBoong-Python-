@@ -2,7 +2,7 @@ import sys
 import pygame
 
 from PySide2 import QtGui
-from PySide2.QtGui import QIcon
+from PySide2.QtGui import QIcon, Qt
 from PySide2.QtWidgets import QLabel, QPushButton, QWidget, QMessageBox, QApplication, QDesktopWidget, \
     QGraphicsOpacityEffect
 
@@ -10,13 +10,15 @@ from PySide2.QtWidgets import QLabel, QPushButton, QWidget, QMessageBox, QApplic
 class BuleungBuleung(QWidget):
     def __init__(self):
         super().__init__()
-        self.main_buleung_buleunng()
+        self.go_main_buleung_buleunng()
         self.main_music = 'music/backgroundmusic.mp3'
         pygame.init()
         pygame.mixer.init()
         pygame.mixer.music.load(self.main_music)
         pygame.mixer.music.play(-1)
 
+    def go_main_buleung_buleunng(self):
+        self.main_buleung_buleunng()
     #메인페이지
     def main_buleung_buleunng(self):
         #메인페이지 사진
@@ -307,7 +309,11 @@ class BuleungBuleung(QWidget):
 
 
 
-
+    #ESC키 누를 시 동작
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.main_background_lb.setVisible(True)
+            print('누름')
 
     #화면 중간에 표시
     def center(self):
