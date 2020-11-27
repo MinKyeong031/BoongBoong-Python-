@@ -1,8 +1,9 @@
 import sys
 import pygame
+import time
 
 from PySide2 import QtGui
-from PySide2.QtGui import QIcon, Qt
+from PySide2.QtGui import QIcon, Qt, QFont
 from PySide2.QtWidgets import QLabel, QPushButton, QWidget, QMessageBox, QApplication, QDesktopWidget, \
     QGraphicsOpacityEffect
 
@@ -120,7 +121,17 @@ class BuleungBuleung(QWidget):
 
     #게임 페이지
     def game_buleung_buleunng(self):
-        #게임 난이도 선택 페이지 사진
+        game_life = 3
+        game_q = ['music/back_q.mp3', 'music/bump_q.mp3', 'music/left_q.mp3', 'music/right_q.mp3', 'music/start_q.mp3', 'music/stop_q.mp3']
+
+        #게임 페이지 음악
+        self.main_music = 'music/game_start.mp3'
+        pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.music.load(self.main_music)
+        pygame.mixer.music.play(0)
+
+        #게임 페이지 사진
         self.game_background_lb = QLabel(self)
         game_background_lb = QtGui.QPixmap("images/game_life1.png")
         self.game_background_lb.setFixedSize(1280, 800)
@@ -128,6 +139,13 @@ class BuleungBuleung(QWidget):
 
         self.main_start_background_lb.setVisible(False)
         self.game_background_lb.setVisible(True)
+
+        while game_life != 0:
+            time.sleep(3000)
+            random_q =
+
+            pass
+
 
     def go_rule_click(self):
         self.rule_notice()
@@ -223,6 +241,46 @@ class BuleungBuleung(QWidget):
         rank2_exit_btn.setGraphicsEffect(opacity)
         rank2_exit_btn.clicked.connect(self.go_rank2_main_buleung_buleunng)
 
+        rank21_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank21_label.setGeometry(220, 200, 350,  60)
+        rank21_label.setFont(QFont("나눔바른펜", 35))
+
+        rank22_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank22_label.setGeometry(220, 305, 350, 60)
+        rank22_label.setFont(QFont("나눔바른펜", 35))
+
+        rank23_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank23_label.setGeometry(220, 410, 350, 60)
+        rank23_label.setFont(QFont("나눔바른펜", 35))
+
+        rank24_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank24_label.setGeometry(220, 515, 350, 60)
+        rank24_label.setFont(QFont("나눔바른펜", 35))
+
+        rank25_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank25_label.setGeometry(220, 620, 350, 60)
+        rank25_label.setFont(QFont("나눔바른펜", 35))
+
+        rank26_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank26_label.setGeometry(720, 200, 350, 60)
+        rank26_label.setFont(QFont("나눔바른펜", 35))
+
+        rank27_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank27_label.setGeometry(720, 305, 350, 60)
+        rank27_label.setFont(QFont("나눔바른펜", 35))
+
+        rank28_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank28_label.setGeometry(720, 410, 350, 60)
+        rank28_label.setFont(QFont("나눔바른펜", 35))
+
+        rank29_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank29_label.setGeometry(720, 515, 350, 60)
+        rank29_label.setFont(QFont("나눔바른펜", 35))
+
+        rank20_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        rank20_label.setGeometry(720, 620, 350, 60)
+        rank20_label.setFont(QFont("나눔바른펜", 35))
+
         self.main_rank_background_lb.setVisible(False)
         self.rank2_background_lb.setVisible(True)
     def go_rank2_main_buleung_buleunng(self):
@@ -245,6 +303,46 @@ class BuleungBuleung(QWidget):
         rank3_exit_btn.setGraphicsEffect(opacity)
         rank3_exit_btn.clicked.connect(self.go_rank3_main_buleung_buleunng)
 
+        rank31_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank31_label.setGeometry(220, 200, 350,  60)
+        rank31_label.setFont(QFont("나눔바른펜", 35))
+
+        rank32_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank32_label.setGeometry(220, 305, 350, 60)
+        rank32_label.setFont(QFont("나눔바른펜", 35))
+
+        rank33_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank33_label.setGeometry(220, 410, 350, 60)
+        rank33_label.setFont(QFont("나눔바른펜", 35))
+
+        rank34_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank34_label.setGeometry(220, 515, 350, 60)
+        rank34_label.setFont(QFont("나눔바른펜", 35))
+
+        rank35_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank35_label.setGeometry(220, 620, 350, 60)
+        rank35_label.setFont(QFont("나눔바른펜", 35))
+
+        rank36_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank36_label.setGeometry(720, 200, 350, 60)
+        rank36_label.setFont(QFont("나눔바른펜", 35))
+
+        rank37_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank37_label.setGeometry(720, 305, 350, 60)
+        rank37_label.setFont(QFont("나눔바른펜", 35))
+
+        rank38_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank38_label.setGeometry(720, 410, 350, 60)
+        rank38_label.setFont(QFont("나눔바른펜", 35))
+
+        rank39_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank39_label.setGeometry(720, 515, 350, 60)
+        rank39_label.setFont(QFont("나눔바른펜", 35))
+
+        rank30_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        rank30_label.setGeometry(720, 620, 350, 60)
+        rank30_label.setFont(QFont("나눔바른펜", 35))
+
         self.main_rank_background_lb.setVisible(False)
         self.rank3_background_lb.setVisible(True)
     def go_rank3_main_buleung_buleunng(self):
@@ -266,6 +364,46 @@ class BuleungBuleung(QWidget):
         opacity.setOpacity(0)
         rank4_exit_btn.setGraphicsEffect(opacity)
         rank4_exit_btn.clicked.connect(self.go_rank4_main_buleung_buleunng)
+
+        rank41_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank41_label.setGeometry(220, 200, 350,  60)
+        rank41_label.setFont(QFont("나눔바른펜", 35))
+
+        rank42_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank42_label.setGeometry(220, 305, 350, 60)
+        rank42_label.setFont(QFont("나눔바른펜", 35))
+
+        rank43_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank43_label.setGeometry(220, 410, 350, 60)
+        rank43_label.setFont(QFont("나눔바른펜", 35))
+
+        rank44_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank44_label.setGeometry(220, 515, 350, 60)
+        rank44_label.setFont(QFont("나눔바른펜", 35))
+
+        rank45_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank45_label.setGeometry(220, 620, 350, 60)
+        rank45_label.setFont(QFont("나눔바른펜", 35))
+
+        rank46_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank46_label.setGeometry(720, 200, 350, 60)
+        rank46_label.setFont(QFont("나눔바른펜", 35))
+
+        rank47_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank47_label.setGeometry(720, 305, 350, 60)
+        rank47_label.setFont(QFont("나눔바른펜", 35))
+
+        rank48_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank48_label.setGeometry(720, 410, 350, 60)
+        rank48_label.setFont(QFont("나눔바른펜", 35))
+
+        rank49_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank49_label.setGeometry(720, 515, 350, 60)
+        rank49_label.setFont(QFont("나눔바른펜", 35))
+
+        rank40_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        rank40_label.setGeometry(720, 620, 350, 60)
+        rank40_label.setFont(QFont("나눔바른펜", 35))
 
         self.main_rank_background_lb.setVisible(False)
         self.rank4_background_lb.setVisible(True)
@@ -312,8 +450,8 @@ class BuleungBuleung(QWidget):
     #ESC키 누를 시 동작
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
+            self.game_background_lb.setVisible(False)
             self.main_background_lb.setVisible(True)
-            print('누름')
 
     #화면 중간에 표시
     def center(self):
