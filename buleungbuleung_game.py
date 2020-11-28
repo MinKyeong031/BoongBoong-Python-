@@ -4,18 +4,21 @@ import pygame
 import random
 import time
 
-from PySide2 import QtGui
+from PySide2 import QtGui, QtWidgets
 from PySide2.QtGui import QIcon, Qt, QFont
 from PySide2.QtWidgets import QLabel, QPushButton, QWidget, QMessageBox, QApplication, QDesktopWidget, \
     QGraphicsOpacityEffect, QLineEdit
 
-
+#TODO 주석, 파일입출력
 class BuleungBuleung(QWidget):
     game_q = ["급정지", "출발", "좌회전", "우회전", "후진", "방지턱"]
     game_life = 3
     score = 0
     begin = 0
     now_q = 0
+    level = 0
+    lv1_cnt = 0
+
     now_game_life = "images/game_life1.png"
     play_sounds = []
     pygame.init()
@@ -40,25 +43,22 @@ class BuleungBuleung(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.go_main_buleung_buleunng()
+        self.main_buleung_buleunng()
         self.play_sounds[12].play(-1)
         self.play_sounds[12].set_volume(0.4)
-
-    def go_main_buleung_buleunng(self):
-        self.main_buleung_buleunng()
 
     # 메인페이지
     def main_buleung_buleunng(self):
         # 메인페이지 사진
         self.main_background_lb = QLabel(self)
-        main_background = QtGui.QPixmap("images/main.png")
+        main_background_bg = QtGui.QPixmap("images/main.png")
         self.main_background_lb.setFixedSize(1280, 800)
-        self.main_background_lb.setPixmap(main_background)
+        self.main_background_lb.setPixmap(main_background_bg)
 
         # 메인페이지 시작버튼
         main_start_btn = QPushButton(self.main_background_lb)
         main_start_btn.setGeometry(395, 300, 490, 200)
-        main_start_btn.clicked.connect(self.go_start_click)
+        main_start_btn.clicked.connect(self.go_game_choice)
         opacity = QGraphicsOpacityEffect(main_start_btn)
         opacity.setOpacity(0)
         main_start_btn.setGraphicsEffect(opacity)
@@ -66,7 +66,7 @@ class BuleungBuleung(QWidget):
         # 메인페이지 게임 방법 버튼
         main_rule_btn = QPushButton(self.main_background_lb)
         main_rule_btn.setGeometry(1050, 470, 235, 130)
-        main_rule_btn.clicked.connect(self.go_rule_click)
+        main_rule_btn.clicked.connect(self.go_rule_notice)
         opacity = QGraphicsOpacityEffect(main_rule_btn)
         opacity.setOpacity(0)
         main_rule_btn.setGraphicsEffect(opacity)
@@ -74,7 +74,7 @@ class BuleungBuleung(QWidget):
         # 메인페이지 랭킹 버튼
         main_rank_btn = QPushButton(self)
         main_rank_btn.setGeometry(1050, 615, 235, 130)
-        main_rank_btn.clicked.connect(self.go_rank_click)
+        main_rank_btn.clicked.connect(self.go_rank_choice)
         opacity = QGraphicsOpacityEffect(main_rank_btn)
         opacity.setOpacity(0)
         main_rank_btn.setGraphicsEffect(opacity)
@@ -90,16 +90,21 @@ class BuleungBuleung(QWidget):
 
         self.main_background_lb.setVisible(True)
 
-    def go_start_click(self):
+
+    def go_game_choice(self):
         self.game_choice()
+    def go_rule_notice(self):
+        self.rule_notice()
+    def go_rank_choice(self):
+        self.rank_choice()
 
     # 게임 난이도 선택 페이지
     def game_choice(self):
         # 게임 난이도 선택 페이지 사진
         self.main_start_background_lb = QLabel(self)
-        main_start_background_lb = QtGui.QPixmap("images/main_game_choice.png")
+        main_start_background_bg = QtGui.QPixmap("images/main_game_choice.png")
         self.main_start_background_lb.setFixedSize(1280, 800)
-        self.main_start_background_lb.setPixmap(main_start_background_lb)
+        self.main_start_background_lb.setPixmap(main_start_background_bg)
 
         # 취소 버튼
         start_exit_btn = QPushButton(self.main_start_background_lb)
@@ -115,7 +120,7 @@ class BuleungBuleung(QWidget):
         opacity = QGraphicsOpacityEffect(start_lv1_btn)
         opacity.setOpacity(0)
         start_lv1_btn.setGraphicsEffect(opacity)
-        start_lv1_btn.clicked.connect(self.go_game2_buleung_buleunng)
+        start_lv1_btn.clicked.connect(self.go_game1_buleung_buleunng)
 
         # 난이도 2 선택 버튼
         start_lv2_btn = QPushButton(self.main_start_background_lb)
@@ -131,7 +136,7 @@ class BuleungBuleung(QWidget):
         opacity = QGraphicsOpacityEffect(start_lv3_btn)
         opacity.setOpacity(0)
         start_lv3_btn.setGraphicsEffect(opacity)
-        start_lv3_btn.clicked.connect(self.go_game2_buleung_buleunng)
+        start_lv3_btn.clicked.connect(self.go_game3_buleung_buleunng)
 
         # 난이도 4 선택 버튼
         start_lv4_btn = QPushButton(self.main_start_background_lb)
@@ -139,7 +144,7 @@ class BuleungBuleung(QWidget):
         opacity = QGraphicsOpacityEffect(start_lv4_btn)
         opacity.setOpacity(0)
         start_lv4_btn.setGraphicsEffect(opacity)
-        start_lv4_btn.clicked.connect(self.go_game2_buleung_buleunng)
+        start_lv4_btn.clicked.connect(self.go_game4_buleung_buleunng)
 
         self.main_background_lb.setVisible(False)
         self.main_start_background_lb.setVisible(True)
@@ -148,183 +153,633 @@ class BuleungBuleung(QWidget):
         self.main_background_lb.setVisible(True)
         self.main_start_background_lb.setVisible(False)
 
+    def go_game1_buleung_buleunng(self):
+        self.play_sounds[13].play(0)
+        time.sleep(4)
+        self.game1_buleung_buleunng()
     def go_game2_buleung_buleunng(self):
         self.play_sounds[13].play(0)
         time.sleep(4)
         self.game2_buleung_buleunng("images/game_life1.png")
+    def go_game3_buleung_buleunng(self):
+        self.play_sounds[13].play(0)
+        time.sleep(4)
+        self.game3_buleung_buleunng("images/game_life1.png")
+    def go_game4_buleung_buleunng(self):
+        self.play_sounds[13].play(0)
+        time.sleep(4)
+        self.game4_buleung_buleunng("images/game_life1.png")
 
-    # 게임 페이지
-    def game2_buleung_buleunng(self, life_img):
-        self.now_game_life = life_img
+    # 게임 페이지1
+    def game1_buleung_buleunng(self):
+        self.level = 1
         # 게임 페이지 사진
-        self.game2_background_lb = QLabel(self)
-        game2_background1_lb = QtGui.QPixmap(life_img)
-        self.game2_background_lb.setFixedSize(1280, 800)
-        self.game2_background_lb.setPixmap(game2_background1_lb)
+        self.game1_background_lb = QLabel(self)
+        game1_background_bg = QtGui.QPixmap("images/game_life1.png")
+        self.game1_background_lb.setFixedSize(1280, 800)
+        self.game1_background_lb.setPixmap(game1_background_bg)
 
         # 정답 버튼
-        stop_btn = QPushButton(self.game2_background_lb)
-        stop_btn.setGeometry(10, 380, 200, 200)
-        opacity = QGraphicsOpacityEffect(stop_btn)
+        stop_btn1 = QPushButton(self.game1_background_lb)
+        stop_btn1.setGeometry(10, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(stop_btn1)
         opacity.setOpacity(0)
-        stop_btn.setGraphicsEffect(opacity)
+        stop_btn1.setGraphicsEffect(opacity)
 
-        start_btn = QPushButton(self.game2_background_lb)
-        start_btn.setGeometry(224, 576, 200, 200)
-        opacity = QGraphicsOpacityEffect(start_btn)
+        start_btn1 = QPushButton(self.game1_background_lb)
+        start_btn1.setGeometry(224, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(start_btn1)
         opacity.setOpacity(0)
-        start_btn.setGraphicsEffect(opacity)
+        start_btn1.setGraphicsEffect(opacity)
 
-        left_btn = QPushButton(self.game2_background_lb)
-        left_btn.setGeometry(434, 380, 200, 200)
-        opacity = QGraphicsOpacityEffect(left_btn)
+        left_btn1 = QPushButton(self.game1_background_lb)
+        left_btn1.setGeometry(434, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(left_btn1)
         opacity.setOpacity(0)
-        left_btn.setGraphicsEffect(opacity)
+        left_btn1.setGraphicsEffect(opacity)
 
-        right_btn = QPushButton(self.game2_background_lb)
-        right_btn.setGeometry(648, 576, 200, 200)
-        opacity = QGraphicsOpacityEffect(right_btn)
+        right_btn1 = QPushButton(self.game1_background_lb)
+        right_btn1.setGeometry(648, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(right_btn1)
         opacity.setOpacity(0)
-        right_btn.setGraphicsEffect(opacity)
+        right_btn1.setGraphicsEffect(opacity)
 
-        back_btn = QPushButton(self.game2_background_lb)
-        back_btn.setGeometry(858, 380, 200, 200)
-        opacity = QGraphicsOpacityEffect(back_btn)
+        back_btn1 = QPushButton(self.game1_background_lb)
+        back_btn1.setGeometry(858, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(back_btn1)
         opacity.setOpacity(0)
-        back_btn.setGraphicsEffect(opacity)
+        back_btn1.setGraphicsEffect(opacity)
 
-        bump_btn = QPushButton(self.game2_background_lb)
-        bump_btn.setGeometry(1072, 576, 200, 200)
-        opacity = QGraphicsOpacityEffect(bump_btn)
+        bump_btn1 = QPushButton(self.game1_background_lb)
+        bump_btn1.setGeometry(1072, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(bump_btn1)
         opacity.setOpacity(0)
-        bump_btn.setGraphicsEffect(opacity)
+        bump_btn1.setGraphicsEffect(opacity)
 
         # 문제
         self.begin = time.time()
-        random_q = random.randint(0, 5)
-        self.now_q = random_q
-        game_q_label = QLabel(self.game_q[random_q], self.game2_background_lb)
-        game_q_label.setGeometry(385, 219, 510, 100)
-        game_q_label.setFont(QFont("나눔바른펜", 35))
-        game_q_label.setAlignment(Qt.AlignCenter)
+        random_q1 = random.randint(0, 5)
+        self.now_q = random_q1
+        game_q_label1 = QLabel(self.game_q[random_q1], self.game1_background_lb)
+        game_q_label1.setGeometry(385, 219, 510, 100)
+        game_q_label1.setFont(QFont("나눔바른펜", 35))
+        game_q_label1.setAlignment(Qt.AlignCenter)
+
+        #힌트(난이도1에만 해당)
+        if random_q1 == 0:
+            opacity = QGraphicsOpacityEffect(stop_btn1)
+            opacity.setOpacity(0.3)
+            stop_btn1.setGraphicsEffect(opacity)
+            stop_btn1.setStyleSheet("background-color:#FF0000; border-radius: 100px")
+        elif random_q1 == 1:
+            opacity = QGraphicsOpacityEffect(start_btn1)
+            opacity.setOpacity(0.3)
+            start_btn1.setGraphicsEffect(opacity)
+            start_btn1.setStyleSheet("background-color:#FF0000; border-radius: 100px")
+        elif random_q1 == 2:
+            opacity = QGraphicsOpacityEffect(left_btn1)
+            opacity.setOpacity(0.3)
+            left_btn1.setGraphicsEffect(opacity)
+            left_btn1.setStyleSheet("background-color:#FF0000; border-radius: 100px")
+        elif random_q1 == 3:
+            opacity = QGraphicsOpacityEffect(right_btn1)
+            opacity.setOpacity(0.3)
+            right_btn1.setGraphicsEffect(opacity)
+            right_btn1.setStyleSheet("background-color:#FF0000; border-radius: 100px")
+        elif random_q1 == 4:
+            opacity = QGraphicsOpacityEffect(back_btn1)
+            opacity.setOpacity(0.3)
+            back_btn1.setGraphicsEffect(opacity)
+            back_btn1.setStyleSheet("background-color:#FF0000; border-radius: 100px")
+        elif random_q1 == 5:
+            opacity = QGraphicsOpacityEffect(bump_btn1)
+            opacity.setOpacity(0.3)
+            bump_btn1.setGraphicsEffect(opacity)
+            bump_btn1.setStyleSheet("background-color:#FF0000; border-radius: 100px")
         self.play_sounds[self.now_q+6].play(0)
 
-        if random_q == 0:
-            stop_btn.clicked.connect(self.game_o)
-            start_btn.clicked.connect(self.game_x)
-            left_btn.clicked.connect(self.game_x)
-            right_btn.clicked.connect(self.game_x)
-            back_btn.clicked.connect(self.game_x)
-            bump_btn.clicked.connect(self.game_x)
-        elif random_q == 1:
-            stop_btn.clicked.connect(self.game_x)
-            start_btn.clicked.connect(self.game_o)
-            left_btn.clicked.connect(self.game_x)
-            right_btn.clicked.connect(self.game_x)
-            back_btn.clicked.connect(self.game_x)
-            bump_btn.clicked.connect(self.game_x)
-        elif random_q == 2:
-            stop_btn.clicked.connect(self.game_x)
-            start_btn.clicked.connect(self.game_x)
-            left_btn.clicked.connect(self.game_o)
-            right_btn.clicked.connect(self.game_x)
-            back_btn.clicked.connect(self.game_x)
-            bump_btn.clicked.connect(self.game_x)
-        elif random_q == 3:
-            stop_btn.clicked.connect(self.game_x)
-            start_btn.clicked.connect(self.game_x)
-            left_btn.clicked.connect(self.game_x)
-            right_btn.clicked.connect(self.game_o)
-            back_btn.clicked.connect(self.game_x)
-            bump_btn.clicked.connect(self.game_x)
-        elif random_q == 4:
-            stop_btn.clicked.connect(self.game_x)
-            start_btn.clicked.connect(self.game_x)
-            left_btn.clicked.connect(self.game_x)
-            right_btn.clicked.connect(self.game_x)
-            back_btn.clicked.connect(self.game_o)
-            bump_btn.clicked.connect(self.game_x)
-        elif random_q == 5:
-            stop_btn.clicked.connect(self.game_x)
-            start_btn.clicked.connect(self.game_x)
-            left_btn.clicked.connect(self.game_x)
-            right_btn.clicked.connect(self.game_x)
-            back_btn.clicked.connect(self.game_x)
-            bump_btn.clicked.connect(self.game_o)
+        if random_q1 == 0:
+            stop_btn1.clicked.connect(self.game_o)
+            start_btn1.clicked.connect(self.game_x)
+            left_btn1.clicked.connect(self.game_x)
+            right_btn1.clicked.connect(self.game_x)
+            back_btn1.clicked.connect(self.game_x)
+            bump_btn1.clicked.connect(self.game_x)
+        elif random_q1 == 1:
+            stop_btn1.clicked.connect(self.game_x)
+            start_btn1.clicked.connect(self.game_o)
+            left_btn1.clicked.connect(self.game_x)
+            right_btn1.clicked.connect(self.game_x)
+            back_btn1.clicked.connect(self.game_x)
+            bump_btn1.clicked.connect(self.game_x)
+        elif random_q1 == 2:
+            stop_btn1.clicked.connect(self.game_x)
+            start_btn1.clicked.connect(self.game_x)
+            left_btn1.clicked.connect(self.game_o)
+            right_btn1.clicked.connect(self.game_x)
+            back_btn1.clicked.connect(self.game_x)
+            bump_btn1.clicked.connect(self.game_x)
+        elif random_q1 == 3:
+            stop_btn1.clicked.connect(self.game_x)
+            start_btn1.clicked.connect(self.game_x)
+            left_btn1.clicked.connect(self.game_x)
+            right_btn1.clicked.connect(self.game_o)
+            back_btn1.clicked.connect(self.game_x)
+            bump_btn1.clicked.connect(self.game_x)
+        elif random_q1 == 4:
+            stop_btn1.clicked.connect(self.game_x)
+            start_btn1.clicked.connect(self.game_x)
+            left_btn1.clicked.connect(self.game_x)
+            right_btn1.clicked.connect(self.game_x)
+            back_btn1.clicked.connect(self.game_o)
+            bump_btn1.clicked.connect(self.game_x)
+        elif random_q1 == 5:
+            stop_btn1.clicked.connect(self.game_x)
+            start_btn1.clicked.connect(self.game_x)
+            left_btn1.clicked.connect(self.game_x)
+            right_btn1.clicked.connect(self.game_x)
+            back_btn1.clicked.connect(self.game_x)
+            bump_btn1.clicked.connect(self.game_o)
+        self.main_start_background_lb.setVisible(False)
+        self.game1_background_lb.setVisible(True)
+
+    # 게임 페이지2
+    def game2_buleung_buleunng(self, life_img):
+        self.level = 2
+        self.now_game_life = life_img
+        # 게임 페이지 사진
+        self.game2_background_lb = QLabel(self)
+        game2_background_bg = QtGui.QPixmap(life_img)
+        self.game2_background_lb.setFixedSize(1280, 800)
+        self.game2_background_lb.setPixmap(game2_background_bg)
+
+        # 정답 버튼
+        stop_btn2 = QPushButton(self.game2_background_lb)
+        stop_btn2.setGeometry(10, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(stop_btn2)
+        opacity.setOpacity(0)
+        stop_btn2.setGraphicsEffect(opacity)
+
+        start_btn2 = QPushButton(self.game2_background_lb)
+        start_btn2.setGeometry(224, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(start_btn2)
+        opacity.setOpacity(0)
+        start_btn2.setGraphicsEffect(opacity)
+
+        left_btn2 = QPushButton(self.game2_background_lb)
+        left_btn2.setGeometry(434, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(left_btn2)
+        opacity.setOpacity(0)
+        left_btn2.setGraphicsEffect(opacity)
+
+        right_btn2 = QPushButton(self.game2_background_lb)
+        right_btn2.setGeometry(648, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(right_btn2)
+        opacity.setOpacity(0)
+        right_btn2.setGraphicsEffect(opacity)
+
+        back_btn2 = QPushButton(self.game2_background_lb)
+        back_btn2.setGeometry(858, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(back_btn2)
+        opacity.setOpacity(0)
+        back_btn2.setGraphicsEffect(opacity)
+
+        bump_btn2 = QPushButton(self.game2_background_lb)
+        bump_btn2.setGeometry(1072, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(bump_btn2)
+        opacity.setOpacity(0)
+        bump_btn2.setGraphicsEffect(opacity)
+
+        # 문제
+        self.begin = time.time()
+        random_q2 = random.randint(0, 5)
+        self.now_q = random_q2
+        game_q_label2 = QLabel(self.game_q[random_q2], self.game2_background_lb)
+        game_q_label2.setGeometry(385, 219, 510, 100)
+        game_q_label2.setFont(QFont("나눔바른펜", 35))
+        game_q_label2.setAlignment(Qt.AlignCenter)
+        self.play_sounds[self.now_q+6].play(0)
+
+        if random_q2 == 0:
+            stop_btn2.clicked.connect(self.game_o)
+            start_btn2.clicked.connect(self.game_x)
+            left_btn2.clicked.connect(self.game_x)
+            right_btn2.clicked.connect(self.game_x)
+            back_btn2.clicked.connect(self.game_x)
+            bump_btn2.clicked.connect(self.game_x)
+        elif random_q2 == 1:
+            stop_btn2.clicked.connect(self.game_x)
+            start_btn2.clicked.connect(self.game_o)
+            left_btn2.clicked.connect(self.game_x)
+            right_btn2.clicked.connect(self.game_x)
+            back_btn2.clicked.connect(self.game_x)
+            bump_btn2.clicked.connect(self.game_x)
+        elif random_q2 == 2:
+            stop_btn2.clicked.connect(self.game_x)
+            start_btn2.clicked.connect(self.game_x)
+            left_btn2.clicked.connect(self.game_o)
+            right_btn2.clicked.connect(self.game_x)
+            back_btn2.clicked.connect(self.game_x)
+            bump_btn2.clicked.connect(self.game_x)
+        elif random_q2 == 3:
+            stop_btn2.clicked.connect(self.game_x)
+            start_btn2.clicked.connect(self.game_x)
+            left_btn2.clicked.connect(self.game_x)
+            right_btn2.clicked.connect(self.game_o)
+            back_btn2.clicked.connect(self.game_x)
+            bump_btn2.clicked.connect(self.game_x)
+        elif random_q2 == 4:
+            stop_btn2.clicked.connect(self.game_x)
+            start_btn2.clicked.connect(self.game_x)
+            left_btn2.clicked.connect(self.game_x)
+            right_btn2.clicked.connect(self.game_x)
+            back_btn2.clicked.connect(self.game_o)
+            bump_btn2.clicked.connect(self.game_x)
+        elif random_q2 == 5:
+            stop_btn2.clicked.connect(self.game_x)
+            start_btn2.clicked.connect(self.game_x)
+            left_btn2.clicked.connect(self.game_x)
+            right_btn2.clicked.connect(self.game_x)
+            back_btn2.clicked.connect(self.game_x)
+            bump_btn2.clicked.connect(self.game_o)
         self.main_start_background_lb.setVisible(False)
         self.game2_background_lb.setVisible(True)
+
+    # 게임 페이지3
+    def game3_buleung_buleunng(self, life_img):
+        self.level = 3
+        self.now_game_life = life_img
+        # 게임 페이지 사진
+        self.game3_background_lb = QLabel(self)
+        game3_background_bg = QtGui.QPixmap(life_img)
+        self.game3_background_lb.setFixedSize(1280, 800)
+        self.game3_background_lb.setPixmap(game3_background_bg)
+
+        # 정답 버튼
+        stop_btn3 = QPushButton(self.game3_background_lb)
+        stop_btn3.setGeometry(10, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(stop_btn3)
+        opacity.setOpacity(0)
+        stop_btn3.setGraphicsEffect(opacity)
+
+        start_btn3 = QPushButton(self.game3_background_lb)
+        start_btn3.setGeometry(224, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(start_btn3)
+        opacity.setOpacity(0)
+        start_btn3.setGraphicsEffect(opacity)
+
+        left_btn3 = QPushButton(self.game3_background_lb)
+        left_btn3.setGeometry(434, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(left_btn3)
+        opacity.setOpacity(0)
+        left_btn3.setGraphicsEffect(opacity)
+
+        right_btn3 = QPushButton(self.game3_background_lb)
+        right_btn3.setGeometry(648, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(right_btn3)
+        opacity.setOpacity(0)
+        right_btn3.setGraphicsEffect(opacity)
+
+        back_btn3 = QPushButton(self.game3_background_lb)
+        back_btn3.setGeometry(858, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(back_btn3)
+        opacity.setOpacity(0)
+        back_btn3.setGraphicsEffect(opacity)
+
+        bump_btn3 = QPushButton(self.game3_background_lb)
+        bump_btn3.setGeometry(1072, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(bump_btn3)
+        opacity.setOpacity(0)
+        bump_btn3.setGraphicsEffect(opacity)
+
+        # 문제
+        self.begin = time.time()
+        random_q3 = random.randint(0, 5)
+        self.now_q = random_q3
+        game_q_label3 = QLabel(self.game_q[random_q3], self.game3_background_lb)
+        game_q_label3.setGeometry(385, 219, 510, 100)
+        game_q_label3.setFont(QFont("나눔바른펜", 35))
+        game_q_label3.setAlignment(Qt.AlignCenter)
+        self.play_sounds[self.now_q+6].play(0)
+
+        if random_q3 == 0:
+            stop_btn3.clicked.connect(self.game_o)
+            start_btn3.clicked.connect(self.game_x)
+            left_btn3.clicked.connect(self.game_x)
+            right_btn3.clicked.connect(self.game_x)
+            back_btn3.clicked.connect(self.game_x)
+            bump_btn3.clicked.connect(self.game_x)
+        elif random_q3 == 1:
+            stop_btn3.clicked.connect(self.game_x)
+            start_btn3.clicked.connect(self.game_o)
+            left_btn3.clicked.connect(self.game_x)
+            right_btn3.clicked.connect(self.game_x)
+            back_btn3.clicked.connect(self.game_x)
+            bump_btn3.clicked.connect(self.game_x)
+        elif random_q3 == 2:
+            stop_btn3.clicked.connect(self.game_x)
+            start_btn3.clicked.connect(self.game_x)
+            left_btn3.clicked.connect(self.game_o)
+            right_btn3.clicked.connect(self.game_x)
+            back_btn3.clicked.connect(self.game_x)
+            bump_btn3.clicked.connect(self.game_x)
+        elif random_q3 == 3:
+            stop_btn3.clicked.connect(self.game_x)
+            start_btn3.clicked.connect(self.game_x)
+            left_btn3.clicked.connect(self.game_x)
+            right_btn3.clicked.connect(self.game_o)
+            back_btn3.clicked.connect(self.game_x)
+            bump_btn3.clicked.connect(self.game_x)
+        elif random_q3 == 4:
+            stop_btn3.clicked.connect(self.game_x)
+            start_btn3.clicked.connect(self.game_x)
+            left_btn3.clicked.connect(self.game_x)
+            right_btn3.clicked.connect(self.game_x)
+            back_btn3.clicked.connect(self.game_o)
+            bump_btn3.clicked.connect(self.game_x)
+        elif random_q3 == 5:
+            stop_btn3.clicked.connect(self.game_x)
+            start_btn3.clicked.connect(self.game_x)
+            left_btn3.clicked.connect(self.game_x)
+            right_btn3.clicked.connect(self.game_x)
+            back_btn3.clicked.connect(self.game_x)
+            bump_btn3.clicked.connect(self.game_o)
+        self.main_start_background_lb.setVisible(False)
+        self.game3_background_lb.setVisible(True)
+
+    # 게임 페이지4
+    def game4_buleung_buleunng(self, life_img):
+        self.level = 4
+        self.now_game_life = life_img
+        # 게임 페이지 사진
+        self.game4_background_lb = QLabel(self)
+        game4_background_bg = QtGui.QPixmap(life_img)
+        self.game4_background_lb.setFixedSize(1280, 800)
+        self.game4_background_lb.setPixmap(game4_background_bg)
+
+        # 정답 버튼
+        stop_btn4 = QPushButton(self.game4_background_lb)
+        stop_btn4.setGeometry(10, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(stop_btn4)
+        opacity.setOpacity(0)
+        stop_btn4.setGraphicsEffect(opacity)
+
+        start_btn4 = QPushButton(self.game4_background_lb)
+        start_btn4.setGeometry(224, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(start_btn4)
+        opacity.setOpacity(0)
+        start_btn4.setGraphicsEffect(opacity)
+
+        left_btn4 = QPushButton(self.game4_background_lb)
+        left_btn4.setGeometry(434, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(left_btn4)
+        opacity.setOpacity(0)
+        left_btn4.setGraphicsEffect(opacity)
+
+        right_btn4 = QPushButton(self.game4_background_lb)
+        right_btn4.setGeometry(648, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(right_btn4)
+        opacity.setOpacity(0)
+        right_btn4.setGraphicsEffect(opacity)
+
+        back_btn4 = QPushButton(self.game4_background_lb)
+        back_btn4.setGeometry(858, 380, 200, 200)
+        opacity = QGraphicsOpacityEffect(back_btn4)
+        opacity.setOpacity(0)
+        back_btn4.setGraphicsEffect(opacity)
+
+        bump_btn4 = QPushButton(self.game4_background_lb)
+        bump_btn4.setGeometry(1072, 576, 200, 200)
+        opacity = QGraphicsOpacityEffect(bump_btn4)
+        opacity.setOpacity(0)
+        bump_btn4.setGraphicsEffect(opacity)
+
+        # 문제
+        self.begin = time.time()
+        random_q4 = random.randint(0, 5)
+        self.now_q = random_q4
+        game_q_label4 = QLabel(self.game_q[random_q4], self.game4_background_lb)
+        game_q_label4.setGeometry(385, 219, 510, 100)
+        game_q_label4.setFont(QFont("나눔바른펜", 35))
+        game_q_label4.setAlignment(Qt.AlignCenter)
+        self.play_sounds[self.now_q+6].play(0)
+
+        if random_q4 == 0:
+            stop_btn4.clicked.connect(self.game_o)
+            start_btn4.clicked.connect(self.game_x)
+            left_btn4.clicked.connect(self.game_x)
+            right_btn4.clicked.connect(self.game_x)
+            back_btn4.clicked.connect(self.game_x)
+            bump_btn4.clicked.connect(self.game_x)
+        elif random_q4 == 1:
+            stop_btn4.clicked.connect(self.game_x)
+            start_btn4.clicked.connect(self.game_o)
+            left_btn4.clicked.connect(self.game_x)
+            right_btn4.clicked.connect(self.game_x)
+            back_btn4.clicked.connect(self.game_x)
+            bump_btn4.clicked.connect(self.game_x)
+        elif random_q4 == 2:
+            stop_btn4.clicked.connect(self.game_x)
+            start_btn4.clicked.connect(self.game_x)
+            left_btn4.clicked.connect(self.game_o)
+            right_btn4.clicked.connect(self.game_x)
+            back_btn4.clicked.connect(self.game_x)
+            bump_btn4.clicked.connect(self.game_x)
+        elif random_q4 == 3:
+            stop_btn4.clicked.connect(self.game_x)
+            start_btn4.clicked.connect(self.game_x)
+            left_btn4.clicked.connect(self.game_x)
+            right_btn4.clicked.connect(self.game_o)
+            back_btn4.clicked.connect(self.game_x)
+            bump_btn4.clicked.connect(self.game_x)
+        elif random_q4 == 4:
+            stop_btn4.clicked.connect(self.game_x)
+            start_btn4.clicked.connect(self.game_x)
+            left_btn4.clicked.connect(self.game_x)
+            right_btn4.clicked.connect(self.game_x)
+            back_btn4.clicked.connect(self.game_o)
+            bump_btn4.clicked.connect(self.game_x)
+        elif random_q4 == 5:
+            stop_btn4.clicked.connect(self.game_x)
+            start_btn4.clicked.connect(self.game_x)
+            left_btn4.clicked.connect(self.game_x)
+            right_btn4.clicked.connect(self.game_x)
+            back_btn4.clicked.connect(self.game_x)
+            bump_btn4.clicked.connect(self.game_o)
+        self.main_start_background_lb.setVisible(False)
+        self.game4_background_lb.setVisible(True)
 
     def game_o(self):
         end = time.time()
         result = round(end - self.begin, 1)
-        if result > 3.5:
-            self.game_x()
-        else:
-            self.score += 10*result
+        if self.level == 1:
             self.play_sounds[self.now_q].play(0)
             time.sleep(1)
-            self.game2_buleung_buleunng(self.now_game_life)
-        self.begin = time.time()
-        self.random_q = random.randint(0, 5)
-        self.game_q_label = QLabel(self.game_q[self.random_q], self.game2_background_lb)
+            if self.lv1_cnt >= 10:
+                self.main_buleung_buleunng()
+            else:
+                self.lv1_cnt += 1
+                self.game1_buleung_buleunng()
+        elif self.level == 2:
+            if result > 3.0:
+                self.game_x()
+            else:
+                self.score += 10*result
+                self.play_sounds[self.now_q].play(0)
+                time.sleep(1)
+                self.game2_buleung_buleunng(self.now_game_life)
+        elif self.level == 3:
+            if result > 2.0:
+                self.game_x()
+            else:
+                self.score += 10*result
+                self.play_sounds[self.now_q].play(0)
+                time.sleep(1)
+                self.game3_buleung_buleunng(self.now_game_life)
+        elif self.level == 4:
+            if result > 1.5:
+                self.game_x()
+            else:
+                self.score += 10*result
+                self.play_sounds[self.now_q].play(0)
+                time.sleep(1)
+                self.game4_buleung_buleunng(self.now_game_life)
 
     def game_x(self):
         self.game_life -= 1
         self.play_sounds[14].play(0)
         time.sleep(1)
-        if self.game_life == 2:
-            self.game2_buleung_buleunng("images/game_life2.png")
-        elif self.game_life == 1:
-            self.game2_buleung_buleunng("images/game_life3.png")
-        elif self.game_life == 0:
-            self.end_game2_buleung_buleunng()
-        self.begin = time.time()
-        self.random_q = random.randint(0, 5)
-        self.game_q_label = QLabel(self.game_q[self.random_q], self.game2_background_lb)
+        if self.level == 1:
+            if self.lv1_cnt >= 10:
+                self.main_buleung_buleunng()
+            else:
+                self.lv1_cnt += 1
+                self.game1_buleung_buleunng()
+        elif self.level == 2:
+            if self.game_life == 2:
+                self.game2_buleung_buleunng("images/game_life2.png")
+            elif self.game_life == 1:
+                self.game2_buleung_buleunng("images/game_life3.png")
+            elif self.game_life == 0:
+                self.end_game2_buleung_buleunng()
+        elif self.level == 3:
+            if self.game_life == 2:
+                self.game3_buleung_buleunng("images/game_life2.png")
+            elif self.game_life == 1:
+                self.game3_buleung_buleunng("images/game_life3.png")
+            elif self.game_life == 0:
+                self.end_game3_buleung_buleunng()
+        elif self.level == 4:
+            if self.game_life == 2:
+                self.game4_buleung_buleunng("images/game_life2.png")
+            elif self.game_life == 1:
+                self.game4_buleung_buleunng("images/game_life3.png")
+            elif self.game_life == 0:
+                self.end_game4_buleung_buleunng()
 
     # 레벨2 게임 끝 페이지
     def end_game2_buleung_buleunng(self):
         # 레벨2 게임 끝 페이지 사진
         self.end_game2_background_lb = QLabel(self)
-        end_game2_background_lb = QtGui.QPixmap("images/game_end.png")
+        end_game2_background_bg = QtGui.QPixmap("images/game_end.png")
         self.end_game2_background_lb.setFixedSize(1280, 800)
-        self.end_game2_background_lb.setPixmap(end_game2_background_lb)
+        self.end_game2_background_lb.setPixmap(end_game2_background_bg)
 
         # 입력 확인 버튼
-        input_ok_btn = QPushButton(self.end_game2_background_lb)
-        input_ok_btn.setGeometry(530, 590, 220, 100)
-        opacity = QGraphicsOpacityEffect(input_ok_btn)
+        input_ok_btn2 = QPushButton(self.end_game2_background_lb)
+        input_ok_btn2.setGeometry(530, 590, 220, 100)
+        opacity = QGraphicsOpacityEffect(input_ok_btn2)
         opacity.setOpacity(0)
-        input_ok_btn.setGraphicsEffect(opacity)
-        input_ok_btn.clicked.connect(self.rank2_buleung_buleunng)
+        input_ok_btn2.setGraphicsEffect(opacity)
+        input_ok_btn2.clicked.connect(self.rank2_buleung_buleunng)
 
-        score_label = QLabel(str(int(self.score)), self.end_game2_background_lb)
-        score_label.setGeometry(650, 280, 200, 80)
-        score_label.setFont(QFont("나눔바른펜", 35))
+        score_label2 = QLabel(str(int(self.score)), self.end_game2_background_lb)
+        score_label2.setGeometry(650, 280, 200, 80)
+        score_label2.setFont(QFont("나눔바른펜", 35))
 
-        name_input = QLineEdit(self.end_game2_background_lb)
-        name_input.setGeometry(650, 417, 330, 90)
-        name_input.setFont(QFont("나눔바른펜", 35))
-        name_input.setStyleSheet("background-color: #E9FFFC;" "border-style: solid;" "border-width: 0px;")
+        name_input2 = QLineEdit(self.end_game2_background_lb)
+        name_input2.setGeometry(650, 417, 330, 90)
+        name_input2.setFont(QFont("나눔바른펜", 35))
+        name_input2.setStyleSheet("background-color: #E9FFFC;" "border-style: solid;" "border-width: 0px;")
 
         self.game2_background_lb.setVisible(False)
         self.end_game2_background_lb.setVisible(True)
         self.play_sounds[15].play(0)
-
     def rank2_buleung_buleunng(self):
         self.end_game2_background_lb.setVisible(False)
         self.rank2_buleung_bluleung()
 
-    def go_rule_click(self):
-        self.rule_notice()
+    # 레벨3 게임 끝 페이지
+    def end_game3_buleung_buleunng(self):
+        # 레벨3 게임 끝 페이지 사진
+        self.end_game3_background_lb = QLabel(self)
+        end_game3_background_bg = QtGui.QPixmap("images/game_end.png")
+        self.end_game3_background_lb.setFixedSize(1280, 800)
+        self.end_game3_background_lb.setPixmap(end_game3_background_bg)
+
+        # 입력 확인 버튼
+        input_ok_btn3 = QPushButton(self.end_game3_background_lb)
+        input_ok_btn3.setGeometry(530, 590, 220, 100)
+        opacity = QGraphicsOpacityEffect(input_ok_btn3)
+        opacity.setOpacity(0)
+        input_ok_btn3.setGraphicsEffect(opacity)
+        input_ok_btn3.clicked.connect(self.rank3_buleung_buleunng)
+
+        score_label3 = QLabel(str(int(self.score)), self.end_game3_background_lb)
+        score_label3.setGeometry(650, 280, 200, 80)
+        score_label3.setFont(QFont("나눔바른펜", 35))
+
+        name_input3 = QLineEdit(self.end_game3_background_lb)
+        name_input3.setGeometry(650, 417, 330, 90)
+        name_input3.setFont(QFont("나눔바른펜", 35))
+        name_input3.setStyleSheet("background-color: #E9FFFC;" "border-style: solid;" "border-width: 0px;")
+
+        self.game3_background_lb.setVisible(False)
+        self.end_game3_background_lb.setVisible(True)
+        self.play_sounds[15].play(0)
+    def rank3_buleung_buleunng(self):
+        self.end_game3_background_lb.setVisible(False)
+        self.rank3_buleung_bluleung()
+
+    # 레벨4 게임 끝 페이지
+    def end_game4_buleung_buleunng(self):
+        # 레벨4 게임 끝 페이지 사진
+        self.end_game4_background_lb = QLabel(self)
+        end_game4_background_bg = QtGui.QPixmap("images/game_end.png")
+        self.end_game4_background_lb.setFixedSize(1280, 800)
+        self.end_game4_background_lb.setPixmap(end_game4_background_bg)
+
+        # 입력 확인 버튼
+        input_ok_btn4 = QPushButton(self.end_game4_background_lb)
+        input_ok_btn4.setGeometry(530, 590, 220, 100)
+        opacity = QGraphicsOpacityEffect(input_ok_btn4)
+        opacity.setOpacity(0)
+        input_ok_btn4.setGraphicsEffect(opacity)
+        input_ok_btn4.clicked.connect(self.rank4_buleung_buleunng)
+
+        score_label4 = QLabel(str(int(self.score)), self.end_game4_background_lb)
+        score_label4.setGeometry(650, 280, 200, 80)
+        score_label4.setFont(QFont("나눔바른펜", 35))
+
+        name_input4 = QLineEdit(self.end_game4_background_lb)
+        name_input4.setGeometry(650, 417, 330, 90)
+        name_input4.setFont(QFont("나눔바른펜", 35))
+        name_input4.setStyleSheet("background-color: #E9FFFC;" "border-style: solid;" "border-width: 0px;")
+
+        self.game4_background_lb.setVisible(False)
+        self.end_game4_background_lb.setVisible(True)
+        self.play_sounds[15].play(0)
+    def rank4_buleung_buleunng(self):
+        self.end_game4_background_lb.setVisible(False)
+        self.rank4_buleung_bluleung()
 
     # 게임 방법 페이지
     def rule_notice(self):
         # 게임 방법 페이지 사진
         self.main_rule_background_lb = QLabel(self)
-        main_rule_background_lb = QtGui.QPixmap("images/main_rule_notice.png")
+        main_rule_background_bg = QtGui.QPixmap("images/main_rule_notice.png")
         self.main_rule_background_lb.setFixedSize(1280, 800)
-        self.main_rule_background_lb.setPixmap(main_rule_background_lb)
+        self.main_rule_background_lb.setPixmap(main_rule_background_bg)
 
         # 취소 버튼
         rule_exit_btn = QPushButton(self.main_rule_background_lb)
@@ -341,16 +796,13 @@ class BuleungBuleung(QWidget):
         self.main_background_lb.setVisible(True)
         self.main_rule_background_lb.setVisible(False)
 
-    def go_rank_click(self):
-        self.rank_choice()
-
     # 순위 난이도 선택 페이지
     def rank_choice(self):
         # 순위 난이도 선택 페이지 사진
         self.main_rank_background_lb = QLabel(self)
-        main_rank_background_lb = QtGui.QPixmap("images/main_rank_choice.png")
+        main_rank_background_bg = QtGui.QPixmap("images/main_rank_choice.png")
         self.main_rank_background_lb.setFixedSize(1280, 800)
-        self.main_rank_background_lb.setPixmap(main_rank_background_lb)
+        self.main_rank_background_lb.setPixmap(main_rank_background_bg)
 
         # 취소 버튼
         rank_exit_btn = QPushButton(self.main_rank_background_lb)
@@ -407,9 +859,9 @@ class BuleungBuleung(QWidget):
     def rank2_buleung_bluleung(self):
         # 난이도 2 랭크 페이지 사진
         self.rank2_background_lb = QLabel(self)
-        rank2_background_lb = QtGui.QPixmap("images/main_rank2.png")
+        rank2_background_bg = QtGui.QPixmap("images/main_rank2.png")
         self.rank2_background_lb.setFixedSize(1280, 800)
-        self.rank2_background_lb.setPixmap(rank2_background_lb)
+        self.rank2_background_lb.setPixmap(rank2_background_bg)
 
         # 취소 버튼
         rank2_exit_btn = QPushButton(self.rank2_background_lb)
@@ -460,18 +912,18 @@ class BuleungBuleung(QWidget):
         rank20_label.setFont(QFont("나눔바른펜", 35))
 
         self.rank2_background_lb.setVisible(True)
-
     def go_rank2_main_buleung_buleunng(self):
         self.rank2_background_lb.setVisible(False)
-        self.go_main_buleung_buleunng()
+        self.main_buleung_buleunng()
+
 
     # 난이도 3 랭크 페이지
     def rank3_buleung_bluleung(self):
         # 난이도 3 랭크 페이지 사진
         self.rank3_background_lb = QLabel(self)
-        rank3_background_lb = QtGui.QPixmap("images/main_rank3.png")
+        rank3_background_bg = QtGui.QPixmap("images/main_rank3.png")
         self.rank3_background_lb.setFixedSize(1280, 800)
-        self.rank3_background_lb.setPixmap(rank3_background_lb)
+        self.rank3_background_lb.setPixmap(rank3_background_bg)
 
         # 취소 버튼
         rank3_exit_btn = QPushButton(self.rank3_background_lb)
@@ -522,18 +974,17 @@ class BuleungBuleung(QWidget):
         rank30_label.setFont(QFont("나눔바른펜", 35))
 
         self.rank3_background_lb.setVisible(True)
-
     def go_rank3_main_buleung_buleunng(self):
         self.rank3_background_lb.setVisible(False)
-        self.main_rank_background_lb.setVisible(True)
+        self.main_buleung_buleunng()
 
     # 난이도 4 랭크 페이지
     def rank4_buleung_bluleung(self):
         # 난이도 4 랭크 페이지 사진
         self.rank4_background_lb = QLabel(self)
-        rank4_background_lb = QtGui.QPixmap("images/main_rank4.png")
+        rank4_background_bg = QtGui.QPixmap("images/main_rank4.png")
         self.rank4_background_lb.setFixedSize(1280, 800)
-        self.rank4_background_lb.setPixmap(rank4_background_lb)
+        self.rank4_background_lb.setPixmap(rank4_background_bg)
 
         # 취소 버튼
         rank4_exit_btn = QPushButton(self.rank4_background_lb)
@@ -584,15 +1035,14 @@ class BuleungBuleung(QWidget):
         rank40_label.setFont(QFont("나눔바른펜", 35))
 
         self.rank4_background_lb.setVisible(True)
-
     def go_rank4_main_buleung_buleunng(self):
         self.rank4_background_lb.setVisible(False)
-        self.main_rank_background_lb.setVisible(True)
+        self.main_buleung_buleunng()
 
     # ESC키 누를 시 동작
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
-            self.go_main_buleung_buleunng()
+            self.main_buleung_buleunng()
 
     # 화면 중간에 표시
     def center(self):
@@ -603,8 +1053,7 @@ class BuleungBuleung(QWidget):
 
     # 프로그램 종료 시
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, '게임 종료', '新부릉부릉을 종료하시겠습니까?', QMessageBox.Yes | QMessageBox.No,
-                                     QMessageBox.No)
+        reply = QMessageBox.question(self, '게임 종료', '新부릉부릉을 종료하시겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             event.accept()
         else:
