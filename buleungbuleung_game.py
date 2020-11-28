@@ -15,16 +15,34 @@ class BuleungBuleung(QWidget):
     game_life = 3
     score = 0
     begin = 0
+    now_q = 0
     now_game_life = "images/game_life1.png"
+    play_sounds = []
+    pygame.init()
+    pygame.mixer.init()
+    play_sounds.append(pygame.mixer.Sound("music/stop.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/start.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/left.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/right.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/back.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/bump.wav"))#5
+    play_sounds.append(pygame.mixer.Sound("music/stop_q.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/start_q.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/left_q.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/right_q.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/back_q.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/bump_q.wav"))#11
+    play_sounds.append(pygame.mixer.Sound("music/backgroundmusic.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/game_start.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/fail.wav"))
+    play_sounds.append(pygame.mixer.Sound("music/result_input.wav"))#15
+
 
     def __init__(self):
         super().__init__()
         self.go_main_buleung_buleunng()
-        self.main_music = 'music/backgroundmusic.mp3'
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load(self.main_music)
-        pygame.mixer.music.play(-1)
+        self.play_sounds[12].play(-1)
+        self.play_sounds[12].set_volume(0.4)
 
     def go_main_buleung_buleunng(self):
         self.main_buleung_buleunng()
@@ -131,6 +149,8 @@ class BuleungBuleung(QWidget):
         self.main_start_background_lb.setVisible(False)
 
     def go_game2_buleung_buleunng(self):
+        self.play_sounds[13].play(0)
+        time.sleep(4)
         self.game2_buleung_buleunng("images/game_life1.png")
 
     # 게임 페이지
@@ -141,14 +161,6 @@ class BuleungBuleung(QWidget):
         game2_background1_lb = QtGui.QPixmap(life_img)
         self.game2_background_lb.setFixedSize(1280, 800)
         self.game2_background_lb.setPixmap(game2_background1_lb)
-
-        # 문제
-        self.begin = time.time()
-        random_q = random.randint(0, 5)
-        game_q_label = QLabel(self.game_q[random_q], self.game2_background_lb)
-        game_q_label.setGeometry(385, 219, 510, 100)
-        game_q_label.setFont(QFont("나눔바른펜", 35))
-        game_q_label.setAlignment(Qt.AlignCenter)
 
         # 정답 버튼
         stop_btn = QPushButton(self.game2_background_lb)
@@ -186,6 +198,16 @@ class BuleungBuleung(QWidget):
         opacity = QGraphicsOpacityEffect(bump_btn)
         opacity.setOpacity(0)
         bump_btn.setGraphicsEffect(opacity)
+
+        # 문제
+        self.begin = time.time()
+        random_q = random.randint(0, 5)
+        self.now_q = random_q
+        game_q_label = QLabel(self.game_q[random_q], self.game2_background_lb)
+        game_q_label.setGeometry(385, 219, 510, 100)
+        game_q_label.setFont(QFont("나눔바른펜", 35))
+        game_q_label.setAlignment(Qt.AlignCenter)
+        self.play_sounds[self.now_q+6].play(0)
 
         if random_q == 0:
             stop_btn.clicked.connect(self.game_o)
@@ -239,7 +261,8 @@ class BuleungBuleung(QWidget):
             self.game_x()
         else:
             self.score += 10*result
-            print("맞음")
+            self.play_sounds[self.now_q].play(0)
+            time.sleep(1)
             self.game2_buleung_buleunng(self.now_game_life)
         self.begin = time.time()
         self.random_q = random.randint(0, 5)
@@ -247,7 +270,8 @@ class BuleungBuleung(QWidget):
 
     def game_x(self):
         self.game_life -= 1
-        print("틀림")
+        self.play_sounds[14].play(0)
+        time.sleep(1)
         if self.game_life == 2:
             self.game2_buleung_buleunng("images/game_life2.png")
         elif self.game_life == 1:
@@ -279,11 +303,13 @@ class BuleungBuleung(QWidget):
         score_label.setFont(QFont("나눔바른펜", 35))
 
         name_input = QLineEdit(self.end_game2_background_lb)
-        name_input.setGeometry(650, 420, 400, 90)
+        name_input.setGeometry(650, 417, 330, 90)
         name_input.setFont(QFont("나눔바른펜", 35))
+        name_input.setStyleSheet("background-color: #E9FFFC;" "border-style: solid;" "border-width: 0px;")
 
         self.game2_background_lb.setVisible(False)
         self.end_game2_background_lb.setVisible(True)
+        self.play_sounds[15].play(0)
 
     def rank2_buleung_buleunng(self):
         self.end_game2_background_lb.setVisible(False)
