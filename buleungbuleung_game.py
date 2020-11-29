@@ -1,13 +1,14 @@
+import csv
 import sys
 
 import pygame
 import random
 import time
+import pandas as pd
 
-from PySide2 import QtGui, QtWidgets
+from PySide2 import QtGui
 from PySide2.QtGui import QIcon, Qt, QFont
-from PySide2.QtWidgets import QLabel, QPushButton, QWidget, QMessageBox, QApplication, QDesktopWidget, \
-    QGraphicsOpacityEffect, QLineEdit
+from PySide2.QtWidgets import QLabel, QPushButton, QWidget, QMessageBox, QApplication, QDesktopWidget, QGraphicsOpacityEffect, QLineEdit
 
 #TODO 주석, 파일입출력
 class BuleungBuleung(QWidget):
@@ -18,6 +19,9 @@ class BuleungBuleung(QWidget):
     now_q = 0
     level = 0
     lv1_cnt = 0
+    rank_name = ""
+    rank_score = 0
+    rank_value = ""
 
     now_game_life = "images/game_life1.png"
     play_sounds = []
@@ -706,6 +710,11 @@ class BuleungBuleung(QWidget):
         self.end_game2_background_lb.setVisible(True)
         self.play_sounds[15].play(0)
     def rank2_buleung_buleunng(self):
+        file = open("files/lv2_rank.csv", 'a', newline='', encoding="utf-8")
+        write = csv.writer(file)
+        print(self.name_input2.text())
+        write.writerow([self.name_input2.text(), self.score])
+        file.close()
         self.end_game2_background_lb.setVisible(False)
         self.rank2_buleung_bluleung()
 
@@ -738,6 +747,11 @@ class BuleungBuleung(QWidget):
         self.end_game3_background_lb.setVisible(True)
         self.play_sounds[15].play(0)
     def rank3_buleung_buleunng(self):
+        file = open("files/lv3_rank.csv", 'a', newline='', encoding="utf-8")
+        write = csv.writer(file)
+        print(self.name_input3.text())
+        write.writerow([self.name_input3.text(), self.score])
+        file.close()
         self.end_game3_background_lb.setVisible(False)
         self.rank3_buleung_bluleung()
 
@@ -770,6 +784,11 @@ class BuleungBuleung(QWidget):
         self.end_game4_background_lb.setVisible(True)
         self.play_sounds[15].play(0)
     def rank4_buleung_buleunng(self):
+        file = open("files/lv4_rank.csv", 'a', newline='', encoding="utf-8")
+        write = csv.writer(file)
+        print(self.name_input4.text())
+        write.writerow([self.name_input4.text(), self.score])
+        file.close()
         self.end_game4_background_lb.setVisible(False)
         self.rank4_buleung_bluleung()
 
@@ -871,43 +890,76 @@ class BuleungBuleung(QWidget):
         rank2_exit_btn.setGraphicsEffect(opacity)
         rank2_exit_btn.clicked.connect(self.go_rank2_main_buleung_buleunng)
 
-        rank21_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        df = pd.read_csv("files/lv2_rank.csv")
+        df = df.sort_values(by=['score'], ignore_index = True, ascending = False)
+
+        self.rank_name = df.iloc[0,1]
+        self.rank_score = df.iloc[0,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank21_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank21_label.setGeometry(220, 200, 350, 60)
         rank21_label.setFont(QFont("나눔바른펜", 35))
 
-        rank22_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[1,1]
+        self.rank_score = df.iloc[1,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank22_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank22_label.setGeometry(220, 305, 350, 60)
         rank22_label.setFont(QFont("나눔바른펜", 35))
 
-        rank23_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[2,1]
+        self.rank_score = df.iloc[2,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank23_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank23_label.setGeometry(220, 410, 350, 60)
         rank23_label.setFont(QFont("나눔바른펜", 35))
 
-        rank24_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[3,1]
+        self.rank_score = df.iloc[3,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank24_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank24_label.setGeometry(220, 515, 350, 60)
         rank24_label.setFont(QFont("나눔바른펜", 35))
 
-        rank25_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[4,1]
+        self.rank_score = df.iloc[4,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank25_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank25_label.setGeometry(220, 620, 350, 60)
         rank25_label.setFont(QFont("나눔바른펜", 35))
 
-        rank26_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[5,1]
+        self.rank_score = df.iloc[5,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank26_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank26_label.setGeometry(720, 200, 350, 60)
         rank26_label.setFont(QFont("나눔바른펜", 35))
 
-        rank27_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[6,1]
+        self.rank_score = df.iloc[6,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank27_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank27_label.setGeometry(720, 305, 350, 60)
         rank27_label.setFont(QFont("나눔바른펜", 35))
 
-        rank28_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[7,1]
+        self.rank_score = df.iloc[7,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank28_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank28_label.setGeometry(720, 410, 350, 60)
         rank28_label.setFont(QFont("나눔바른펜", 35))
 
-        rank29_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[8,1]
+        self.rank_score = df.iloc[8,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank29_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank29_label.setGeometry(720, 515, 350, 60)
         rank29_label.setFont(QFont("나눔바른펜", 35))
 
-        rank20_label = QLabel("김민경\t999점", self.rank2_background_lb)
+        self.rank_name = df.iloc[9,1]
+        self.rank_score = df.iloc[9,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank20_label = QLabel(self.rank_value, self.rank2_background_lb)
         rank20_label.setGeometry(760, 620, 350, 60)
         rank20_label.setFont(QFont("나눔바른펜", 35))
 
@@ -933,43 +985,76 @@ class BuleungBuleung(QWidget):
         rank3_exit_btn.setGraphicsEffect(opacity)
         rank3_exit_btn.clicked.connect(self.go_rank3_main_buleung_buleunng)
 
-        rank31_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        df = pd.read_csv("files/lv3_rank.csv")
+        df = df.sort_values(by=['score'], ignore_index = True, ascending = False)
+
+        self.rank_name = df.iloc[0,1]
+        self.rank_score = df.iloc[0,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank31_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank31_label.setGeometry(220, 200, 350, 60)
         rank31_label.setFont(QFont("나눔바른펜", 35))
 
-        rank32_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[1,1]
+        self.rank_score = df.iloc[1,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank32_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank32_label.setGeometry(220, 305, 350, 60)
         rank32_label.setFont(QFont("나눔바른펜", 35))
 
-        rank33_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[2,1]
+        self.rank_score = df.iloc[2,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank33_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank33_label.setGeometry(220, 410, 350, 60)
         rank33_label.setFont(QFont("나눔바른펜", 35))
 
-        rank34_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[3,1]
+        self.rank_score = df.iloc[3,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank34_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank34_label.setGeometry(220, 515, 350, 60)
         rank34_label.setFont(QFont("나눔바른펜", 35))
 
-        rank35_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[4,1]
+        self.rank_score = df.iloc[4,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank35_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank35_label.setGeometry(220, 620, 350, 60)
         rank35_label.setFont(QFont("나눔바른펜", 35))
 
-        rank36_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[5,1]
+        self.rank_score = df.iloc[5,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank36_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank36_label.setGeometry(720, 200, 350, 60)
         rank36_label.setFont(QFont("나눔바른펜", 35))
 
-        rank37_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[6,1]
+        self.rank_score = df.iloc[6,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank37_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank37_label.setGeometry(720, 305, 350, 60)
         rank37_label.setFont(QFont("나눔바른펜", 35))
 
-        rank38_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[7,1]
+        self.rank_score = df.iloc[7,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank38_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank38_label.setGeometry(720, 410, 350, 60)
         rank38_label.setFont(QFont("나눔바른펜", 35))
 
-        rank39_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[8,1]
+        self.rank_score = df.iloc[8,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank39_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank39_label.setGeometry(720, 515, 350, 60)
         rank39_label.setFont(QFont("나눔바른펜", 35))
 
-        rank30_label = QLabel("김민경\t999점", self.rank3_background_lb)
+        self.rank_name = df.iloc[9,1]
+        self.rank_score = df.iloc[9,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank30_label = QLabel(self.rank_value, self.rank3_background_lb)
         rank30_label.setGeometry(760, 620, 350, 60)
         rank30_label.setFont(QFont("나눔바른펜", 35))
 
@@ -994,43 +1079,76 @@ class BuleungBuleung(QWidget):
         rank4_exit_btn.setGraphicsEffect(opacity)
         rank4_exit_btn.clicked.connect(self.go_rank4_main_buleung_buleunng)
 
-        rank41_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        df = pd.read_csv("files/lv4_rank.csv")
+        df = df.sort_values(by=['score'], ignore_index = True, ascending = False)
+
+        self.rank_name = df.iloc[0,1]
+        self.rank_score = df.iloc[0,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank41_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank41_label.setGeometry(220, 200, 350, 60)
         rank41_label.setFont(QFont("나눔바른펜", 35))
 
-        rank42_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[1,1]
+        self.rank_score = df.iloc[1,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank42_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank42_label.setGeometry(220, 305, 350, 60)
         rank42_label.setFont(QFont("나눔바른펜", 35))
 
-        rank43_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[2,1]
+        self.rank_score = df.iloc[2,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank43_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank43_label.setGeometry(220, 410, 350, 60)
         rank43_label.setFont(QFont("나눔바른펜", 35))
 
-        rank44_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[3,1]
+        self.rank_score = df.iloc[3,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank44_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank44_label.setGeometry(220, 515, 350, 60)
         rank44_label.setFont(QFont("나눔바른펜", 35))
 
-        rank45_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[4,1]
+        self.rank_score = df.iloc[4,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank45_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank45_label.setGeometry(220, 620, 350, 60)
         rank45_label.setFont(QFont("나눔바른펜", 35))
 
-        rank46_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[5,1]
+        self.rank_score = df.iloc[5,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank46_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank46_label.setGeometry(720, 200, 350, 60)
         rank46_label.setFont(QFont("나눔바른펜", 35))
 
-        rank47_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[6,1]
+        self.rank_score = df.iloc[6,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank47_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank47_label.setGeometry(720, 305, 350, 60)
         rank47_label.setFont(QFont("나눔바른펜", 35))
 
-        rank48_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[7,1]
+        self.rank_score = df.iloc[7,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank48_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank48_label.setGeometry(720, 410, 350, 60)
         rank48_label.setFont(QFont("나눔바른펜", 35))
 
-        rank49_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[8,1]
+        self.rank_score = df.iloc[8,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank49_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank49_label.setGeometry(720, 515, 350, 60)
         rank49_label.setFont(QFont("나눔바른펜", 35))
 
-        rank40_label = QLabel("김민경\t999점", self.rank4_background_lb)
+        self.rank_name = df.iloc[9,1]
+        self.rank_score = df.iloc[9,2]
+        self.rank_value = self.rank_name + "\t" + self.rank_score
+        rank40_label = QLabel(self.rank_value, self.rank4_background_lb)
         rank40_label.setGeometry(760, 620, 350, 60)
         rank40_label.setFont(QFont("나눔바른펜", 35))
 
