@@ -203,6 +203,7 @@ class BuleungBuleung(QWidget):
 
     # 게임 난이도1 페이지
     def game1_buleung_buleunng(self):
+        self.play_sounds[12].set_volume(0.2)
         # 현재 레벨 저장
         self.level = 1
         # 게임 난이도1 페이지 사진
@@ -347,6 +348,7 @@ class BuleungBuleung(QWidget):
 
     # 게임 난이도2 페이지
     def game2_buleung_buleunng(self, life_img):
+        self.play_sounds[12].set_volume(0.2)
         # 현재 레벨 저장
         self.level = 2
         #현재 남은 목숨 저장
@@ -460,6 +462,7 @@ class BuleungBuleung(QWidget):
 
     # 게임 난이도3 페이지
     def game3_buleung_buleunng(self, life_img):
+        self.play_sounds[12].set_volume(0.2)
         # 현재 레벨 저장
         self.level = 3
         #현재 남은 목숨 저장
@@ -518,9 +521,9 @@ class BuleungBuleung(QWidget):
         random_q3 = random.randint(0, 5)
         # 현재 문제 저장
         self.now_q = random_q3
-        game_q_label3 = QLabel(self.game_q[random_q3], self.game3_background_lb)
+        game_q_label3 = QLabel("문제 안 알려듐ㅋ", self.game3_background_lb)
         game_q_label3.setGeometry(385, 219, 510, 100)
-        game_q_label3.setFont(QFont("나눔바른펜", 35))
+        game_q_label3.setFont(QFont("나눔바른펜", 30))
         game_q_label3.setAlignment(Qt.AlignCenter)
         # 문제에 해당하는 음악
         self.play_sounds[self.now_q+6].play(0)
@@ -632,9 +635,9 @@ class BuleungBuleung(QWidget):
         random_q4 = random.randint(0, 5)
         #현재 문제 저장
         self.now_q = random_q4
-        game_q_label4 = QLabel(self.game_q[random_q4], self.game4_background_lb)
+        game_q_label4 = QLabel("눈감았다뜨면1초지나감ㅋ", self.game4_background_lb)
         game_q_label4.setGeometry(385, 219, 510, 100)
-        game_q_label4.setFont(QFont("나눔바른펜", 35))
+        game_q_label4.setFont(QFont("나눔바른펜", 30))
         game_q_label4.setAlignment(Qt.AlignCenter)
         #문제에 해당하는 음악
         self.play_sounds[self.now_q+6].play(0)
@@ -707,7 +710,7 @@ class BuleungBuleung(QWidget):
                 self.game1_buleung_buleunng()
         #난이도2
         elif self.level == 2:
-            if result > 2.5:
+            if result > 2.0:
                 #정답을 누르는 데 2.5초 보다 오래 걸렸을 때, 오답 함수로 이동
                 self.game_x()
             else:
@@ -725,7 +728,7 @@ class BuleungBuleung(QWidget):
                 self.game_x()
             else:
                 #정답일 때, 정답을 누르는 데 걸린 시간과 10을 곱해 점수 저장
-                self.score += 10*(1.5-result)
+                self.score += 15*(1.5-result)
                 #정답 음악(음악 종료 후 화면 전환)
                 self.play_sounds[self.now_q].play(0)
                 time.sleep(1)
@@ -738,7 +741,7 @@ class BuleungBuleung(QWidget):
                 self.game_x()
             else:
                 #정답일 때, 정답을 누르는 데 걸린 시간과 10을 곱해 점수 저장
-                self.score += 10*(1.0-result)
+                self.score += 25*(1.0-result)
                 #정답 음악(음악 종료 후 화면 전환)
                 self.play_sounds[self.now_q].play(0)
                 time.sleep(1)
